@@ -4,14 +4,15 @@
 #include "pl.h"
 
 #define SOBEL_IP_CORE_REG_BASE 		0x43c00000	 // the sobel edge detector AXI-Lite MMAP Registers base address
-#define SOBEL_IP_CORE_REG_SIZE 		4 * 1024
+#define SOBEL_IP_CORE_REG_SIZE 		4 * 1024	 // the range to allocate for the IP core's control registers
 
-#define ENABLE_REG_OFFSET			0x00
-#define INPUT_COUNT_REG_OFFSET		0x04
-#define OUTPUT_COUNT_REG_OFFSET		0x08
-#define CLOCK_COUNT_REG_OFFSET		0x0c
+#define ENABLE_REG_OFFSET			0x00		 // system enable     : Enable_Reg <= 0x00[0:0]
+#define INPUT_COUNT_REG_OFFSET		0x04		 // input data count  : Count_In_Reg <= 0x04[31:0]
+#define OUTPUT_COUNT_REG_OFFSET		0x08		 // output data count : Count_Out_Reg <= 0x08[31:0]
+#define CLOCK_COUNT_REG_OFFSET		0x0c		 // clock count       : Clock_Reg <= 0x0c[31:0]
 
-#define CHUNK_SIZE_PER_TRANSFER		4096
+#define CHUNK_SIZE_PER_TRANSFER		4096		// increase this for faster processing. Caution however is needed! The transfer size that
+												// the AXI DMA IP core can handle must be an integer power of 2.
 
 //#define IS_VERBOSE // uncomment this for verbose messages
 
@@ -22,7 +23,7 @@ typedef struct {
 	uint32_t transfer_size;	// Transfer size in bytes	
 	uint32_t total_size;	// Total data size in bytes
 	uint32_t status;		// The worker status
-	int halt_op;			// Halt signal
+	int halt_op;			// Halt signal (not used here)
 
 }dma_thread_args_t;
 

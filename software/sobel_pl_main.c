@@ -21,7 +21,6 @@ int main (int argc, char *argv[]) {
 	printf("\n\n");
 
 	sobel_edge_detection_t params;
-
 	dma_thread_args_t *tx_args;
 	dma_thread_args_t *rx_args;
 
@@ -86,7 +85,7 @@ int main (int argc, char *argv[]) {
 
 	}
 
-	AXILite_Register_Write(params.reg, 0x00, 0x00); // disable the Sobel IP Core in case it is enabled
+	AXILite_Register_Write(params.reg, 0x00, 0x00);
 
 	close(params.tx_channel->fd); 
 	close(params.rx_channel->fd);

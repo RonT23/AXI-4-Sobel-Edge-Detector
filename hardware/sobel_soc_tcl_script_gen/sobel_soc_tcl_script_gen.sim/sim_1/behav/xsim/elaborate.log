@@ -1,0 +1,56 @@
+Vivado Simulator v2024.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.1/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axis_infrastructure_v1_1_1 -L axis_data_fifo_v2_0_13 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot AXI_sobel_edge_detector_top_tb_behav xil_defaultlib.AXI_sobel_edge_detector_top_tb xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.sobel_package
+Compiling package vl.vl_types
+Compiling module xil_defaultlib.glbl
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.MMCME2_ADV(CLKFBOUT_MULT_F=10.0,...
+Compiling module unisims_ver.BUFG
+Compiling module xil_defaultlib.clk_wiz_0_clk_wiz
+Compiling module xil_defaultlib.clk_wiz_0
+Compiling architecture behv of entity xil_defaultlib.Axi_Lite_Registers [axi_lite_registers_default]
+Compiling module axis_infrastructure_v1_1_1.axis_infrastructure_v1_1_1_util_...
+Compiling module axis_infrastructure_v1_1_1.axis_infrastructure_v1_1_1_util_...
+Compiling module axis_infrastructure_v1_1_1.axis_infrastructure_v1_1_1_util_...
+Compiling module xpm.xpm_cdc_sync_rst(DEST_SYNC_FF=3,...
+Compiling module xpm.xpm_fifo_rst(COMMON_CLOCK=0,CDC_...
+Compiling module xpm.xpm_fifo_reg_bit
+Compiling module xpm.xpm_counter_updn(COUNTER_WIDTH=1...
+Compiling module xpm.xpm_counter_updn(COUNTER_WIDTH=9...
+Compiling module xpm.xpm_counter_updn(COUNTER_WIDTH=9...
+Compiling module xpm.xpm_memory_base(MEMORY_TYPE=1,ME...
+Compiling module xpm.xpm_cdc_gray(DEST_SYNC_FF=3,INIT...
+Compiling module xpm.xpm_fifo_reg_vec(REG_WIDTH=9)
+Compiling module xpm.xpm_cdc_gray(DEST_SYNC_FF=5,INIT...
+Compiling module xpm.xpm_fifo_reg_vec(REG_WIDTH=10)
+Compiling module xpm.xpm_cdc_gray(DEST_SYNC_FF=3,INIT...
+Compiling module xpm.xpm_counter_updn(COUNTER_WIDTH=2...
+Compiling module xpm.xpm_fifo_base(COMMON_CLOCK=0,FIF...
+Compiling module xpm.xpm_fifo_axis(CLOCKING_MODE="ind...
+Compiling module axis_data_fifo_v2_0_13.axis_data_fifo_v2_0_13_top(C_FAM...
+Compiling module xil_defaultlib.axis_data_fifo_0
+Compiling architecture behv of entity xil_defaultlib.shift_kernel_buffer [shift_kernel_buffer_default]
+Compiling architecture behv of entity xil_defaultlib.Scale_Down [scale_down_default]
+Compiling architecture behv of entity xil_defaultlib.Partial_Sums [partial_sums_default]
+Compiling architecture behv of entity xil_defaultlib.Gradients [gradients_default]
+Compiling architecture behv of entity xil_defaultlib.Gradient_Magnitude [gradient_magnitude_default]
+Compiling architecture struct of entity xil_defaultlib.Processing_Stages [processing_stages_default]
+Compiling architecture behv of entity xil_defaultlib.generic_counter [generic_counter_default]
+Compiling architecture behv of entity xil_defaultlib.Telemetry [telemetry_default]
+Compiling architecture struct of entity xil_defaultlib.AXI_sobel_edge_detector [axi_sobel_edge_detector_default]
+Compiling architecture behv of entity xil_defaultlib.AXI_sobel_edge_detector_top [axi_sobel_edge_detector_top_defa...]
+Compiling architecture tb of entity xil_defaultlib.axi_sobel_edge_detector_top_tb
+Built simulation snapshot AXI_sobel_edge_detector_top_tb_behav

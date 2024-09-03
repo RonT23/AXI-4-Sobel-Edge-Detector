@@ -1,0 +1,8 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ronal/Desktop/sobel_soc.gen/sources_1/ip/axis_data_fifo_0/sim/axis_data_fifo_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module axis_data_fifo_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ronal/Desktop/sobel_soc.gen/sources_1/ip/clk_wiz_0_1/clk_wiz_0_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ronal/Desktop/sobel_soc.gen/sources_1/ip/clk_wiz_0_1/clk_wiz_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/ronal/Desktop/AXI-4-Sobel-Edge-Detector/hardware/sobel_soc_tcl_script_gen/sobel_soc_tcl_script_gen.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl

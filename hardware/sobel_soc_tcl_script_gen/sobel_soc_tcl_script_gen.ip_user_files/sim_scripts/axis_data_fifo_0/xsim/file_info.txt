@@ -1,0 +1,2 @@
+axis_data_fifo_0.v,verilog,xil_defaultlib,../../../../../../../sobel_soc.gen/sources_1/ip/axis_data_fifo_0/sim/axis_data_fifo_0.v,incdir="../../../ipstatic/hdl"incdir="../../../../../../../sobel_soc.gen/sources_1/ip/axis_data_fifo_0/hdl"
+glbl.v,Verilog,xil_defaultlib,glbl.v

@@ -122,18 +122,20 @@ int get_input(int argc, char *argv[], sobel_edge_detection_t *params) {
  */
 int setup(sobel_edge_detection_t *params) {
 
-    printf("[STATUS] Inserting dma-proxy.ko driver module\n");
+    #ifdef IS_VERBOSE 
+        printf("[STATUS] Inserting dma-proxy.ko driver module\n");
+    #endif 
 
     // Rename the modules folder
     system("mv /lib/modules/* /lib/modules/xilinx/ > /dev/null 2>&1");
 
-    // Remove the dma-proxy module if still active
+    // Remove the dma-proxy module if still active and re-insert it
     system("sudo rmmod -w /lib/modules/xilinx/extra/dma-proxy.ko > /dev/null 2>&1");
-
-    // Insert the dma-proxy module
     system("sudo insmod /lib/modules/xilinx/extra/dma-proxy.ko > /dev/null 2>&1");
 
-    printf("[STATUS] Initializing the DMA channels\n");
+    #ifdef IS_VERBOSE
+        printf("[STATUS] Initializing the DMA channels\n");
+    #endif
 
     // Setup the DMA channels
 	params->tx_channel = (Channel *)malloc(sizeof(Channel));
@@ -144,14 +146,19 @@ int setup(sobel_edge_detection_t *params) {
 
     // Activate the AXI DMA IP core
     if (AXI_DMA_Init(params->tx_channel) || AXI_DMA_Init(params->rx_channel)) {
+       
+        #ifdef IS_VERBOSE   
+            printf("[ERROR] Cannot initialize the DMA channels \n");
+            printf("[STATUS] Exiting with failures \n");
+        #endif
 
-        printf("[ERROR] Cannot initialize the DMA channels \n");
-        printf("[STATUS] Exiting with failures \n");
         return SOBEL_FAILURE;
 
     }
 
-    printf("[STATUS] Setting up the AXI4-Lite Sobel Edge Detector interface \n");
+    #ifdef IS_VERBOSE 
+        printf("[STATUS] Setting up the AXI4-Lite Sobel Edge Detector interface \n");
+    #endif 
 
     // Map the AXI Sobel Edge Detector registers 
 	int fd = open("/dev/mem", O_RDWR | O_SYNC); 
@@ -166,19 +173,21 @@ int setup(sobel_edge_detection_t *params) {
         printf("[INFO] Register Address Space Size : %d B\n", params->reg->size);
         printf("[INFO] Register Physical Address   : 0x%x \n", params->reg->base);
         printf("[INFO] Register Mapped Address     : 0x%x \n", params->reg->ptr);
+
+        printf("[STATUS] Enabling the Sobel Edge Detector IP core\n");
     #endif
 
     // Disable the core if already is enabled and then enable it
-    printf("[STATUS] Enabling the Sobel Edge Detector IP core\n");
-
     AXILite_Register_Write(params->reg, ENABLE_REG_OFFSET, 0x00);
     AXILite_Register_Write(params->reg, ENABLE_REG_OFFSET, 0x01);
 
     // verify that the register is written
     if ( AXILite_Register_Read(params->reg, ENABLE_REG_OFFSET) != 1 ) {
 
-        printf("[ERROR] Reg@[0x%x + 0x%x] cannot be written \n", params->reg->base, ENABLE_REG_OFFSET);
-        printf("[STATUS] Exiting with failure \n");
+        #ifdef IS_VERBOSE
+            printf("[ERROR] Reg@[0x%x + 0x%x] cannot be written \n", params->reg->base, ENABLE_REG_OFFSET);
+            printf("[STATUS] Exiting with failure \n");
+        #endif
 
         close(fd);
 
@@ -224,9 +233,12 @@ void *ps2pl(void *args) {
 
     // Open the input file
     if ( (fi = open(thread_args->file, O_RDONLY)) == -1) {
+        
+        #ifdef IS_VERBOSE
+            printf("[ERROR] Unable to open input file \n");
+            printf("[STATUS] Exiting with failure! \n");
+        #endif
 
-        printf("[ERROR] Unable to open input file \n");
-        printf("[STATUS] Exiting with failure! \n");
         thread_args->status = SOBEL_FAILURE;
 
         return NULL;
@@ -248,8 +260,12 @@ void *ps2pl(void *args) {
         // Read data from the input file into the buffer.
         uint32_t n = read(fi, channel->buf_ptr[buf_id].buffer, transfer);
         if (n <= 0) {
-            printf("[WARN] Return value from input file: %d \n", n);
-            printf("[STATUS] Terminating the thread\n");
+            
+            #ifdef 
+                printf("[WARN] Return value from input file: %d \n", n);
+                printf("[STATUS] Terminating the thread\n");
+            #endif
+             
             break;
         }
 
@@ -258,28 +274,41 @@ void *ps2pl(void *args) {
 
         // Start the DMA transfer from PS to PL (blocking)
         if (ioctl(channel->fd, XFER, &buf_id) < 0) {
-            printf("[ERROR] PS to PL DMA transfer failed \n");
-            printf("[STATUS] Exiting with failure! \n");
+            
+            #ifdef IS_VERBOSE 
+                printf("[ERROR] PS to PL DMA transfer failed \n");
+                printf("[STATUS] Exiting with failure! \n");
+            #endif
+
             thread_args->status = SOBEL_FAILURE;
             close(fi);
+            
             return NULL;
         }
 
         // Wait until DMA transfer completes succesfully
         if (channel->buf_ptr[buf_id].status != PROXY_NO_ERROR) {
-            printf("[ERROR] PS to PL DMA transfer encountered a proxy error \n");
-            printf("[STATUS] Exiting with failure! \n");
+            
+            #ifdef IS_VERBOSE 
+                printf("[ERROR] PS to PL DMA transfer encountered a proxy error \n");
+                printf("[STATUS] Exiting with failure! \n");
+            #endif 
+
             thread_args->status = SOBEL_FAILURE; 
-            close(fi);  
+            close(fi);
+
             return NULL;
         }
 
     }
 
-    printf("[STATUS] PS to PL Thread terminated! \n");
+    #ifdef IS_VERBOSE
+        printf("[STATUS] PS to PL Thread terminated! \n");
+    #endif
 
     close(fi);
     thread_args->status = SOBEL_SUCCESS;
+
     return NULL;
 
 } /* end of ps2pl() */
@@ -297,9 +326,14 @@ void *pl2ps(void *args) {
     dma_thread_args_t *thread_args = (dma_thread_args_t *)args; 
 
     if ( (fo = open(thread_args->file, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1) {
-        printf("[ERROR] Unable to open output file \n");
-        printf("[STATUS] Exiting with failure! \n");
+        
+        #ifdef IS_VERBOSE
+            printf("[ERROR] Unable to open output file \n");
+            printf("[STATUS] Exiting with failure! \n");
+        #endif
+
         thread_args->status = SOBEL_FAILURE;
+        
         return NULL;
     }
 
@@ -320,26 +354,40 @@ void *pl2ps(void *args) {
 
         // Start the DMA transfer from PL to PS.
         if (ioctl(channel->fd, XFER, &buf_id) < 0) {
-            printf("[ERROR] PL to PS DMA transfer failed \n");
-            printf("[STATUS] Exiting with failure! \n");
+            
+            #ifdef IS_VERBOSE
+                printf("[ERROR] PL to PS DMA transfer failed \n");
+                printf("[STATUS] Exiting with failure! \n");
+            #endif 
+
             thread_args->status = SOBEL_FAILURE;
             close(fo);
+            
             return NULL;
         }
 
         // Write the received data to the output file.
         uint32_t n = write(fo, channel->buf_ptr[buf_id].buffer, transfer);
         if (n <= 0) {
-            printf("[WARN] Return vale from output file: %d", n);
-            printf("[STATUS] Terminating the thread. \n");
+
+            #ifdef IS_VERBOSE
+                printf("[WARN] Return vale from output file: %d", n);
+                printf("[STATUS] Terminating the thread. \n");
+            #endif
+
             break;
         }
 
         if (channel->buf_ptr[buf_id].status != PROXY_NO_ERROR) {
-            printf("[ERROR] PL to PS DMA transfer encountered a proxy error \n");
-            printf("[STATUS] Exiting with failure! \n");
+            
+            #ifdef IS_VERBOSE
+                printf("[ERROR] PL to PS DMA transfer encountered a proxy error \n");
+                printf("[STATUS] Exiting with failure! \n");
+            #endif
+
             thread_args->status = SOBEL_FAILURE;
             close(fo); 
+            
             return NULL;
         }
 
@@ -347,7 +395,9 @@ void *pl2ps(void *args) {
 
     }
 
-    printf("[STATUS] PL to PS Thread terminated!\n");
+    #ifdef IS_VERBOSE
+        printf("[STATUS] PL to PS Thread terminated!\n");
+    #endif 
 
     close(fo);
     thread_args->status = SOBEL_SUCCESS; 

@@ -1,4 +1,3 @@
-#CC = gcc
 CC = arm-linux-gnueabihf-gcc
 CFLAGS = -g -Wall -static -O3
 LDFLAGS =
