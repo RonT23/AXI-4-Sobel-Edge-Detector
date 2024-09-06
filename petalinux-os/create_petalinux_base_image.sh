@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ] ; then
-    echo "Usage : $0 <PetaLinux-tools-path>"
+    echo "Usage : $0 <PetaLinux-tools-path> <Path-to-xsa> <Output-bin-path>"
     exit 1
 fi
 
@@ -15,7 +15,7 @@ petalinux-create --type project --name $petalinux_project_name --template zynq -
 cd ./$petalinux_project_name
 
 # Configure the PetaLinux on the propvided hardware
-petalinux-config --get-hw-description=../
+petalinux-config --get-hw-description=$2
 
 # Create and configure the DMA-Proxy module
 petalinux-create --type modules --name dma-proxy --enable --force
@@ -40,5 +40,5 @@ petalinux-build
 petalinux-package --boot --force --fsbl ./images/linux/zynq_fsbl.elf --fpga ./images/linux/system.bit --uboot ./images/linux/u-boot.elf
 
 # Export boot components
-mkdir -p ../petalinux_os_bin
-cp ./images/linux/BOOT.BIN ./images/linux/boot.scr ./images/linux/system.dtb ./images/linux/image.ub ./images/linux/rootfs.tar.gz ../petalinux_os_bin
+mkdir -p $3
+cp ./images/linux/BOOT.BIN ./images/linux/boot.scr ./images/linux/system.dtb ./images/linux/image.ub ./images/linux/rootfs.tar.gz $3

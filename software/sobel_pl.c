@@ -24,7 +24,8 @@ int get_input(int argc, char *argv[], sobel_edge_detection_t *params) {
         printf("  FOUT : Path to the 8-bit output grayscale raw image \n");
         printf("  NX   : Horizontal image dimension \n");
         printf("  NY   : Vertical image dimension \n");
-        exit(1);
+        
+        return SOBEL_FAILURE;
     }
 
     printf("[STATUS] Checking the inputs \n");
@@ -170,10 +171,9 @@ int setup(sobel_edge_detection_t *params) {
     params->reg->ptr = mmap(NULL, params->reg->size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, params->reg->base);
     
     #ifdef IS_VERBOSE
-        printf("[INFO] Register Address Space Size : %d B\n", params->reg->size);
+        printf("[INFO] Register Address Space Size : %d Bytes \n", params->reg->size);
         printf("[INFO] Register Physical Address   : 0x%x \n", params->reg->base);
         printf("[INFO] Register Mapped Address     : 0x%x \n", params->reg->ptr);
-
         printf("[STATUS] Enabling the Sobel Edge Detector IP core\n");
     #endif
 
@@ -226,8 +226,7 @@ void create_thread(dma_thread_args_t *thread_args, Channel *channel, void *handl
  * @param args : The list of worker arguments.
  */
 void *ps2pl(void *args) {
-    int buf_id = 0;
-    int fi;
+    int fi, buf_id = 0;
 
 	dma_thread_args_t *thread_args = (dma_thread_args_t *)args;  
 
@@ -307,6 +306,7 @@ void *ps2pl(void *args) {
     #endif
 
     close(fi);
+
     thread_args->status = SOBEL_SUCCESS;
 
     return NULL;
@@ -320,8 +320,7 @@ void *ps2pl(void *args) {
  * @param args : The list of worker arguments.
  */
 void *pl2ps(void *args) {
-    int buf_id = 0;  
-    int fo; 
+    int fo, buf_id = 0;  
 
     dma_thread_args_t *thread_args = (dma_thread_args_t *)args; 
 
@@ -400,6 +399,7 @@ void *pl2ps(void *args) {
     #endif 
 
     close(fo);
+
     thread_args->status = SOBEL_SUCCESS; 
 
     return NULL;

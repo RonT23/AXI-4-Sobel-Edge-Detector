@@ -1,7 +1,0 @@
-Running: xsim.dir/AXI_sobel_edge_detector_top_tb_behav/xsimk.exe -simmode gui -wdb AXI_sobel_edge_detector_top_tb_behav.wdb -simrunnum 0 -socket 62582
-Design successfully loaded
-Design Loading Memory Usage: 8984 KB (Peak: 8984 KB)
-Design Loading CPU Usage: 62 ms
-Simulation completed
-Simulation Memory Usage: 18840 KB (Peak: 18840 KB)
-Simulation CPU Usage: 78562 ms

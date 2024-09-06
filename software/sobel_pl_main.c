@@ -24,16 +24,9 @@ int main (int argc, char *argv[]) {
 	dma_thread_args_t *tx_args;
 	dma_thread_args_t *rx_args;
 
-    if ( get_input(argc, argv, &params) != SOBEL_SUCCESS ) {
+    if ( get_input(argc, argv, &params) != SOBEL_SUCCESS ) {  exit( SOBEL_FAILURE ); }
 
-        exit( SOBEL_FAILURE );
-   
-    }
-
-	if ( setup( &params ) != SOBEL_SUCCESS ) {
-	
-        exit( SOBEL_FAILURE );
-    } 
+	if ( setup( &params ) != SOBEL_SUCCESS ) 			   {  exit( SOBEL_FAILURE ); } 
 	
 	int N = params.Nx * params.Ny;
 	
@@ -41,10 +34,13 @@ int main (int argc, char *argv[]) {
 	rx_args =  (dma_thread_args_t *)malloc( sizeof(dma_thread_args_t) );
 	
 	if (!(tx_args) || !(rx_args)) {
+
 		printf("[ERROR] Failed to allocate memory for DMA thread arguments \n");
 		printf("[STATUS] Exiting with failure! \n");
+		
 		free(tx_args);
 		free(rx_args);
+		
 		exit(SOBEL_FAILURE);
 	}
 
@@ -76,7 +72,6 @@ int main (int argc, char *argv[]) {
 		printf("---------------------------------------- \n");
 		printf("Processing Time (Measured in Software) : %.2f ms \n", proc_time * 1000.0 );
 		printf("Total throughput (Measured in Software): %.2f bps \n", (double) params.Nx * params.Ny * 8 / proc_time);
-
 		printf("Number of bytes read (Core stats)      : %d   bytes \n", AXILite_Register_Read(params.reg, INPUT_COUNT_REG_OFFSET));
 		printf("Number of bytes written (Core stats)   : %d   bytes \n", AXILite_Register_Read(params.reg, OUTPUT_COUNT_REG_OFFSET));
 		printf("Number of clock cycles (Core stats)    : %d   cc \n", AXILite_Register_Read(params.reg, CLOCK_COUNT_REG_OFFSET));
