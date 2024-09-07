@@ -6,7 +6,7 @@
     - sim                               [ok]
     - sources                           [ok]
     - Sobel_Package.vhd                 [ok]
-    - Sobel_SoC.tcl                     [Need to be generated on new Vivado and tried]
+    - Sobel_SoC.tcl                     [ok]
 
 2. Petalinux-OS
     - create_petalinux_base_image.sh    [ok]
@@ -24,8 +24,14 @@
     - original-files                    [need to add new images]
 
 6. Build-SoC
-    - build.py                          [build a python script that will generate the hardware, build the petalinux-os, compile the software and in general build all the required binaries for the SoC and deploy them on SD]
+    - build.py                          [build the petalinux-os, compile the software and in general build all the required binaries for the SoC and deploy them on SD]
     - env.config                        [add enviroment variables]
+
+Test everything on Ajax
+
+Write the document for the IP core
+
+Write the user-guide for the repository
 
 ## Overview
 
