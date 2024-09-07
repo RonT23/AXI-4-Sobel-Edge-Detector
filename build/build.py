@@ -111,15 +111,19 @@ def build_PetaLinux_project(config):
     
     os.chdir(build_script_file_path)
 
+    print(proj_dir)
+    print(os_tools_dir)
+    print(build_PetaLinux_project)
+
     # run the petalinux creation script
     os.system(f"chmod +x ./create_petalinux_base_image.sh")
-    os.system(f"./create_petalinux_base_image.sh {os_tools_dir} {xsa_file} {os_build_folder}")
+    os.system(f"./create_petalinux_base_image.sh {os_tools_dir} {xsa_file}")
     
     os.chdir(build_script_file_path)
 
     # clean-up if requested
-    if config.get("RM_OS_BUILD"):
-        os.system("rm -r ./sobel_soc_zynq")
+    if config.get("RM_OS_PRJ") == "YES":
+        os.system("sudo rm -r ./sobel_soc_zynq")
 
     return 1
 
