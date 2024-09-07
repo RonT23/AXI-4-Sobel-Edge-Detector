@@ -18,13 +18,13 @@
     - Makefile                          [ok]
     
 5. Data-Samples
-    - Python scripts                    [Need to fix dimensions Nx <-> Ny]
-    - raw-files                         [need to add new images]
-    - csv-files                         [need to add new images]
-    - original-files                    [need to add new images]
+    - Python scripts                    [pk]
+    - raw-files                         [ok]
+    - csv-files                         [ok]
+    - original-files                    [ok]
 
 6. Build-SoC
-    - build.py                          [build the petalinux-os, compile the software and in general build all the required binaries for the SoC and deploy them on SD]
+    - build.py                          [ compile the software and in general build all the required binaries for the SoC and deploy them on SD]
     - env.config                        [add enviroment variables]
 
 Test everything on Ajax

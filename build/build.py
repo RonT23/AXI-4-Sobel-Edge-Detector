@@ -7,8 +7,14 @@ current_os = platform.system()
 print(current_os)
 
 '''
-    Function to read the configuration file.
-    @param file_path : the path to the configuration file
+    Function to read a configuration file and return its contents as a dictionary.
+
+    The configuration file is expected to have key-value pairs separated by commas.
+    Each key-value pair should be on a separate line, with the key and value being
+    separated by a comma. The value can optionally be enclosed in double quotes.
+
+    @param file_path: The path to the configuration file.
+    @return: A dictionary containing the key-value pairs from the configuration file.
 '''
 def read_config_file(file_path):
     config = {}
@@ -32,9 +38,19 @@ def read_config_file(file_path):
     return config
 
 '''
-    Build the Vivado project from the given TCL script. Generate and export the XSA file.
-    This function can work on both Windows and Linux (Unix) devices. Requires Vivado app.
-    @param config : the list of configurations
+    Function to build a Vivado project from the given TCL script and generate the XSA file.
+    
+    This function automates the process of building a Vivado project by executing
+    a TCL script using Vivado. It works on both Windows and Linux (Unix) platforms,
+    provided that the Vivado application is installed and accessible.
+
+    @param config: A dictionary containing the configuration options, which include:
+        - PROJ_DIR: The project directory path.
+        - VIVADO_DIR: The path to the Vivado executable.
+        - TCL_FILE: The path to the TCL script used to build the project.
+        - RUN_VIVADO_GUI: (Optional) Set to "YES" to run Vivado in GUI mode.
+    
+    @return: Returns 1 on success, or -1 if a required configuration is missing.
 '''
 def build_Vivado_project(config):
 
@@ -51,7 +67,7 @@ def build_Vivado_project(config):
         return -1
 
     if not tcl_file:
-        print("[ERROR] Missing TCL_DIR in the configuration.")
+        print("[ERROR] Missing TCL_FILE in the configuration.")
         return -1
 
     # go to root project directory
@@ -80,12 +96,25 @@ def build_Vivado_project(config):
     return 1
 
 '''
-    This function can only be executed on Linux (Unix) machines.
+    Function to build a PetaLinux project using the provided configuration on Linux (Unix) machines.
+    
+    This function automates the process of building a PetaLinux project by running a
+    PetaLinux creation script. It must be run on a Linux (Unix) machine and requires
+    the PetaLinux tools to be installed.
+
+    @param config: A dictionary containing the following configuration options:
+        - PROJ_DIR: The root project directory.
+        - PETALINUX_DIR: The directory where PetaLinux tools are installed.
+        - OS_FOLDER: The folder where the PetaLinux build script is located.
+        - XSA_FILE: The hardware description (XSA) file to be used.
+        - RM_OS_PRJ: (Optional) Set to "YES" to remove the OS project folder after build.
+
+    @return: Returns 1 on success, or -1 if an error occurs or if run on Windows.
 '''
 def build_PetaLinux_project(config):
 
     # if not linux exit
-    if current_os == "Windows":
+    if current_os != "Linux":
         print("[ERROR] This function cannot be executed on Windows machines.")
         return -1
 
@@ -105,15 +134,15 @@ def build_PetaLinux_project(config):
     if not os_build_folder:
         print("[ERROR] Missing OS_FOLDER in the configuration.")
         return -1
-        
+
+    if not xsa_file:
+        print("[ERROR] Missing XSA_FILE in the configuration.")
+        return -1
+
     build_script_file_path = os.path.join(proj_dir, os_build_folder)
     xsa_file = os.path.join(proj_dir, xsa_file)
     
     os.chdir(build_script_file_path)
-
-    print(proj_dir)
-    print(os_tools_dir)
-    print(build_PetaLinux_project)
 
     # run the petalinux creation script
     os.system(f"chmod +x ./create_petalinux_base_image.sh")
@@ -127,6 +156,21 @@ def build_PetaLinux_project(config):
 
     return 1
 
+'''
+    Function to flash the SD card with the PetaLinux project files.
+    
+    This function automates the process of flashing an SD card with the PetaLinux
+    binaries using a shell script. It is designed to run on Linux systems and will
+    fail if executed on Windows. Additionally, if specified, it can load data
+    onto the SD card after flashing.
+
+    @param config: A dictionary containing the following configuration options:
+        - PROJ_DIR: The root project directory.
+        - OS_FOLDER: The folder where the PetaLinux build binaries are located.
+        - LOAD_TEST_DATA: (Optional) Set to "YES" to load test images to the SD card after flashing.
+
+    @return: Returns 1 on success, or -1 if an error occurs or if run on Windows.
+'''
 def flash_sd(config):
     
     # if not linux exit
@@ -134,6 +178,40 @@ def flash_sd(config):
         print("[ERROR] This function cannot be executed on Windows machines.")
         return -1
 
+    proj_dir = config.get("PROJ_DIR")
+    os_build_folder = config.get("OS_FOLDER")
+    
+    if not proj_dir:
+        print("[ERROR] Missing PROJ_DIR in the configuration.")
+        return -1
+    
+    if not os_build_folder:
+        print("[ERROR] Missing OS_FOLDER in the configuration.")
+        return -1
+
+    petalinux_bins_path = os.path.join(proj_dir, os_build_folder)
+    
+    os.chdir(petalinux_bins_path)
+
+    # run the flash_sd.sh script
+    os.system(f"chmod +x ./flash_sd.sh")
+    os.system(f"./flash.sh {petalinux_bins_path}/petalinux-bins {proj_dir}")
+    
+    # if defined load also some test images
+    if config.get("LOAD_TEST_DATA") == "YES":
+        
+        data_folder = config.get("DATA_FOLDER")
+
+        if not data_folder:
+            print("[ERROR] Missing DATA_FOLDER in the configuration.")
+            return -1
+
+        data_folder = os.path.join(proj_dir, data_folder)
+
+        os.system(f"sudo cp {data_folder}/* /media/$USER/ROOTFS/home/petalinux/")
+    
+    return 1
+    
     
 if __name__ == "__main__":
 
