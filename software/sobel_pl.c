@@ -260,7 +260,7 @@ void *ps2pl(void *args) {
         uint32_t n = read(fi, channel->buf_ptr[buf_id].buffer, transfer);
         if (n <= 0) {
             
-            #ifdef 
+            #ifdef IS_VERBOSE
                 printf("[WARN] Return value from input file: %d \n", n);
                 printf("[STATUS] Terminating the thread\n");
             #endif
