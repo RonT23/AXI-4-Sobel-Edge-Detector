@@ -24,10 +24,9 @@
     - original-files                    [ok]
 
 6. Build-SoC
-    - build.py                          [ compile the software and in general build all the required binaries for the SoC and deploy them on SD]
-    - env.config                        [add enviroment variables]
+    - build.py                          [οκ]
+    - env.config                        [οκ]
 
-Test everything on Ajax
 
 Write the document for the IP core
 
