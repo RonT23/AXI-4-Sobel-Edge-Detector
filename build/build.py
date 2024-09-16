@@ -1,10 +1,9 @@
-#!/bin/usr/python3
+#!/bin/usr/env/python3
 
 import os
 import platform
 
 current_os = platform.system()
-print(current_os)
 
 '''
     Function to read a configuration file and return its contents as a dictionary.
@@ -153,7 +152,7 @@ def build_PetaLinux_project(config):
     # clean-up if requested
     if config.get("RM_OS_PRJ") == "YES":
         os.system("sudo rm -r ./sobel_soc_zynq")
-
+        
     return 1
 
 '''
@@ -195,10 +194,10 @@ def flash_sd(config):
 
     # run the flash_sd.sh script
     os.system(f"chmod +x ./flash_sd.sh")
-    os.system(f"./flash.sh {petalinux_bins_path}/petalinux-bins {proj_dir}")
+    os.system(f"./flash_sd.sh {petalinux_bins_path}/petalinux-bins {proj_dir}")
     
     # if defined load also some test images
-    if config.get("LOAD_TEST_DATA") == "YES":
+    if config.get("LOAD_DATA") == "YES":
         
         data_folder = config.get("DATA_FOLDER")
 
@@ -209,7 +208,8 @@ def flash_sd(config):
         data_folder = os.path.join(proj_dir, data_folder)
 
         os.system(f"sudo cp {data_folder}/* /media/$USER/ROOTFS/home/petalinux/")
-    
+        os.system("sync")
+        
     return 1
     
     
