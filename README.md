@@ -1,68 +1,84 @@
 # AXI4 Sobel Edge Detector
 
+## CAUTION!
+
+**THIS REPOSITORY IS NOT YET COMPLETE. THERE IS WORK TO BE DONE ON DOCUMENTATION AND THE USER GUIDE. FOR NOW, THE SOURCE CODE IS AVAILABLE.**
+
 ## Project Overview
 
-In this project we implement a ZYNQ-7 SoC for edge detection using the Sobel algorithm. The project combines the custom development of a Sobel Edge Detector FPGA core in VHDL using AMD Vivado, embedded Linux using AMD's PetaLinux utilities and embedded software in C for controlling the system from user-space. 
+This project implements a ZYNQ-7 SoC for edge detection using the Sobel algorithm. It combines the custom development of a Sobel Edge Detector FPGA core in VHDL using AMD Vivado, embedded Linux using AMD's PetaLinux utilities, and embedded software in C for user-space system control.
 
 ## Introduction
 
+- Comming Soon
+
 ## Repository Content
 
-- The build folder contains the automation python file `build.py` which is used to automate the build of the SoC along with the configuration file needed to define the parameters for the build. 
-- The data-sampels contains some sample images both in CSV, RAW and TIFF formats as well as some python scripts used to convert images and visualize. 
-- The hardware folder contains the VHDL description for both the Sobel Edge Detector IP Core FPGA design and the simulation along with the TCL script used to re-generate the Vivado project. 
-- The petalinux-os folder contains scripts and source code used to generate PetaLinux binaries. 
-- The software folder contains all the source code for the software application used to control the Sobel SoC. 
-- The docs folder contains documents for both the FPGA implementation and the SoC design and evaluation. 
+- The build folder contains the automation Python script `build.py`, which automates the SoC build process. It also includes the configuration file that defines the build parameters.
+- The `data-samples` folder contains sample images in CSV, RAW, and TIFF formats, as well as Python scripts for image conversion and visualization.
+- The `hardware` folder contains the VHDL description of the Sobel Edge Detector IP Core FPGA design, simulation files, and a TCL script to regenerate the Vivado project.
+- The `petalinux-os` folder contains scripts and source code for generating PetaLinux binaries.
+- The `software` folder contains all the source code for the software application used to control the Sobel SoC. 
+- The `docs` folder contains documentation on the FPGA implementation, SoC design, and evaluation.
 
 ## The SED IP Core 
 
-The Sobel Edge Detector IP Core (SED) is a custom AXI-4 compatible peripheral designed in VHDL for FPGA application with the task of accelerating the edge detection processing on images.  
+The Sobel Edge Detector IP Core (SED) is a custom AXI-4 compatible peripheral, designed in VHDL for FPGA applications to accelerate edge detection processing on images.
 
 ### Features
 
+- Comming Soon
+
 ### Limitations
+
+- Comming Soon
 
 ### Performance
 
+- Comming Soon
+
 ### Usage
 
-More information about the design and operation of the IP core can be found in `/docs/AXI-4-SED.pdf`.
+- Comming Soon
 
 ## The Z7SED SoC
 
-The ZYNQ 7000 Sobel Edge Detector (Z7SED) is a ZYNQ 7000 based SoC which uses the SED peripheral controlled by a user-space Linux application. 
+- Comming Soon
 
 ### Block Diagram
 
+- Comming Soon
+
 ### Operating System
+
+- Comming Soon
 
 ### Software
 
-More information about the design and operation of the Z7SED can be found in `/docs/Z7SED-SoC.pdf`.
+- Comming Soon
 
 ## Building the Z7SED SoC 
 
-Use the `build.py` script in `/build/` folder. The script will take care and configure and build everything and deploy the binaries and related files into the SD card of the ZYNQ-based development board with FPGA fabric. Before running the script in a text edidor of your choise open the `env.config` file to provide some configurations that are needed from the automated build script. The parameters are described in the following table.
+Use the `build.py` script in the `/build/` folder to configure, build, and deploy the binaries and related files to the SD card of the ZYNQ-based development board with FPGA fabric. Before running the script, open the `env.config` file in a text editor of your choice to provide the required configurations, as described in the table below.
 
 <div align="center">
 
 | Parameter | Description |
 |-----------|-------------|
-| PROJ_DIR  | The full path to the project folder |
-| VIVADO_DIR | The full path to the Vivado executable |
-| PETALINUX_DIR | The full path to the PetaLinux tools |
-| SW_FOLDER | The relative path within the project folder to the software folder |
-| TCL_FILE |The relative path within the project to the TCL Vivado project file |
-| XSA_FILE | The relative path within the project to the generated XSA file |
-| OS_FOLDER | The relative path to the PetaLinux OS filder | 
-| DATA_FOLDER | The relative path within the project folder to the data folder |
-| BUILD_VIVADO_PRJ | "YES" or "NO". Defines to the build.py wether to create or not the Vivado project |
-| RUN_VIVADO_GUI | "YES" or "NO". Defines to the build.py weather to run the Vivado in GUI mode or in TCL|
-| RM_VIVADO_PRJ | "YES" or "NO". Defines weather to remove the Vivado project files after the XSA is generated |
-| BUILD_OS_PRJ | "YES" or "NO". Defines whether to create the PetaLinux project or not |
-| RM_OS_PRJ | "YES" or "NO". Defines whether to remove the PetaLinux files after the binaries are created. |
-| FLASH_SD | "YES" or "NO". Defines whether to flash the SD card or not. |
-| LOAD_DATA | "YES" or "NO". Defines whether to load the data from the provided data folder into the SD card of the board | 
+| PROJ_DIR  | Full path to the project folder |
+| VIVADO_DIR | Full path to the Vivado executable |
+| PETALINUX_DIR | Full path to the PetaLinux tools |
+| SW_FOLDER | Relative path within the project folder to the software folder |
+| TCL_FILE | Relative path within the project folder to the TCL Vivado project file |
+| XSA_FILE | Relative path within the project folder to the generated XSA file |
+| OS_FOLDER | Relative path to the PetaLinux OS folder | 
+| DATA_FOLDER | Relative path within the project folder to the data folder |
+| BUILD_VIVADO_PRJ | "YES" or "NO". Defines whether `build.py` should create the Vivado project |
+| RUN_VIVADO_GUI | "YES" or "NO". Defines whether `build.py` should run the Vivado in GUI or TCL mode|
+| RM_VIVADO_PRJ | "YES" or "NO". Defines whether to remove the Vivado project files after the XSA generation |
+| BUILD_OS_PRJ | "YES" or "NO". Defines whether to create the PetaLinux project |
+| RM_OS_PRJ | "YES" or "NO". Defines whether to remove the PetaLinux files after the binaries creation. |
+| FLASH_SD | "YES" or "NO". Defines whether to flash the SD card. |
+| LOAD_DATA | "YES" or "NO". Defines whether to load the data from the data folder onto the boards SD card| 
 
 </div>
